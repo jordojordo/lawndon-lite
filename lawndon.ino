@@ -3,14 +3,17 @@
 #include <Arduino.h>
 #endif
 
+#include "drive.h"
 #include "flysky.h"
 #include <IBusBM.h>
 
 static IBusBM ibus;
+Drive drive;
 
 void setup() {
   Serial.begin(115200);
 
+  drive.setup();
   ibus.begin(Serial);
 }
 
