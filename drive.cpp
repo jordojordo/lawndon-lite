@@ -1,24 +1,54 @@
 #include "drive.h"
+#include "flysky.h"
 #include <Arduino.h>
 
-void Drive::setDirection(int directionPin, char state) {
-  digitalWrite(directionPin, state);
-};
-
-void Drive::setBrake(int brakePin, char state) {
-  digitalWrite(brakePin, state);
-};
-
-void Drive::setWorkDuty(int pwmPin, int value) {
-  analogWrite(pwmPin, value); 
-}
+Drive::Drive(){};
 
 void Drive::setup() {
-  pinMode(leftDirPin, OUTPUT);
-  pinMode(leftPwmPin, OUTPUT);
-  pinMode(leftBrakePin, OUTPUT);
+  Serial.begin(CONSOLE_BAUDRATE);
+  Serial.println(F("SETUP"));
 
-  pinMode(rightDirPin, OUTPUT);
-  pinMode(rightPwmPin, OUTPUT);
-  pinMode(rightBrakePin, OUTPUT);
+  pinMode(pinDriveLeftDir, OUTPUT);
+  pinMode(pinDriveLeftPwm, OUTPUT);
+  pinMode(pinDriveLeftBrake, OUTPUT);
+
+  pinMode(pinDriveRightDir, OUTPUT);
+  pinMode(pinDriveRightPwm, OUTPUT);
+  pinMode(pinDriveRightBrake, OUTPUT);
+
+  Flysky::setup();
+
+  Serial.println(F("Sending Flysky Config"));
+  Serial1.begin(FLYSKY_BAUDRATE);
+  ibus.begin(Serial1);
+}
+
+void Drive::controlDriveLeftMotor(int speed, int direction) {
+  if (direction == 0) {
+    // reverse
+    digitalWrite(pinDriveLeftDir, LOW);
+    digitalWrite(pinDriveLeftBrake, HIGH);
+  } else {
+    // forward
+    digitalWrite(pinDriveLeftDir, HIGH);
+    digitalWrite(pinDriveLeftBrake, LOW);
+  }
+
+  // control
+  analogWrite(pinDriveLeftPwm, speed);
+}
+
+void Drive::controlDriveRightMotor(int speed, int direction) {
+  if (direction == 0) {
+    // reverse
+    digitalWrite(pinDriveRightDir, LOW);
+    digitalWrite(pinDriveRightBrake, HIGH);
+  } else {
+    // forward
+    digitalWrite(pinDriveRightDir, HIGH);
+    digitalWrite(pinDriveRightBrake, LOW);
+  }
+
+  // control
+  analogWrite(pinDriveRightPwm, speed);
 }
