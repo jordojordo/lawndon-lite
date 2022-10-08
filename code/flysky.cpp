@@ -9,8 +9,6 @@ Flysky flysky;
 
 Flysky::Flysky() {}
 
-// Read the number of a given channel and convert to the range provided.
-// If the channel is off, return the default value
 int Flysky::readChannel(byte channelInput, int minLimit, int maxLimit,
                         int defaultValue) {
   uint16_t ch = ibus.readChannel(channelInput);
@@ -58,6 +56,7 @@ void Flysky::loop() {
 
   // calculate turning speed
   if (flyCH1 != 0 && flyCH2 > 0) {
+    // forward
     driveLeftSpeed += abs(flyCH2 + flyCH1);
     driveRightSpeed += abs(flyCH2 - flyCH1);
   } else {
