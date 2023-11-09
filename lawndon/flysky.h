@@ -7,10 +7,15 @@
 class Flysky {
 public:
   // remote channels
-  int flyCH1 = 0; // yaw | L -> R
-  int flyCH2 = 0; // yaw | Up -> Down
-  int flyCH3 = 0; // throttle | Up -> Down
-  int flyCH4 = 0; // throttle | L -> R
+  int flyCH1_roll = 0; // roll | L -> R
+  int flyCH2_pitch = 0; // pitch | Up -> Down
+  int flyCH3_throttle = 0; // throttle | Up -> Down
+  int flyCH4_yaw = 0; // yaw | L -> R
+
+  int flyCH6_swa = 0;
+  int flyCH7_swb = 0;
+  int flyCH8_swc = 0;
+  int flyCH9_swd = 0;
 
   // motor speeds
   int driveLeftSpeed = 0;

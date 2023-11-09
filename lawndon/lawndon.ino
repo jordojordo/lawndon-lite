@@ -7,8 +7,10 @@
 
 void setup() {
   drive.setup();
+  motor.setup();
 }
 
 void loop() {
   drive.loop();
+  motor.loop();
 }

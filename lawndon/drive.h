@@ -1,7 +1,9 @@
 #ifndef DRIVE_H
 #define DRIVE_H
+
 #include "flysky.h"
 #include <Arduino.h>
+#include <Servo.h>
 
 // pin defs
 #define pinDriveLeftDir 12
@@ -13,6 +15,10 @@
 #define pinDriveRightPwm 11
 #define pinDriveRightBrake 8
 #define pinDriveRightPower 10
+
+// ESC
+extern Servo leftEsc;
+extern Servo rightEsc;
 
 // baudrates
 #define CONSOLE_BAUDRATE 19200

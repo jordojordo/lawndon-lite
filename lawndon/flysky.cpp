@@ -23,59 +23,65 @@ int Flysky::readChannel(byte channelInput, int minLimit, int maxLimit,
 void Flysky::setup() {}
 
 void Flysky::loop() {
-  flyCH1 = readChannel(0, -100, 100, 0); // yaw | L -> R
-  flyCH2 = readChannel(1, -100, 100, 0); // yaw | Up -> Down
-  flyCH3 = readChannel(2, 0, 155, 0);    // throttle | Up -> Down
-  flyCH4 = readChannel(3, -100, 100, 0); // throttle | L -> R
+  flyCH1_roll = readChannel(0, -1000, 1000, 0); // roll | L -> R
+  flyCH2_pitch = readChannel(1, -1000, 1000, 0); // pitch | Up -> Down
+  flyCH3_throttle = readChannel(2, 0, 1000, 0);    // throttle | Up -> Down
+  flyCH4_yaw = readChannel(3, -1000, 1000, 0); // yaw | L -> R
 
-  Serial.print("  |  Ch1 = ");
-  Serial.print(flyCH1);
-  Serial.print(" | Ch2 = ");
-  Serial.print(flyCH2);
-  Serial.print(" | Ch3 = ");
-  Serial.print(flyCH3);
-  Serial.print(" | Ch4 = ");
-  Serial.print(flyCH4);
+  // flyCH6_swa = readChannel(6, 0, 1, 0);
+  // flyCH7_swb = readChannel(7, 0, 1, 0);
+  // flyCH8_swc = readChannel(8, 0, 2, 0);
+  // flyCH9_swd = readChannel(9, 0, 1, 0);
 
-  Serial.println();
+  // Serial.print("  |  Roll = ");
+  // Serial.print(flyCH1_roll);
+  // Serial.print(" | Pitch = ");
+  // Serial.print(flyCH2_pitch);
+  // Serial.print(" | Throttle = ");
+  // Serial.print(flyCH3_throttle);
+  // Serial.print(" | Yaw = ");
+  // Serial.print(flyCH4_yaw);
+
+  // Serial.println();
 
   // set speed
-  driveLeftSpeed = flyCH3;
-  driveRightSpeed = flyCH3;
+  driveLeftSpeed = flyCH3_throttle;
+  driveRightSpeed = flyCH3_throttle;
 
   // set direction
-  if (flyCH2 >= 0) {
+  if (flyCH2_pitch >= 0) {
     driveLeftDir = 1;
     driveRightDir = 1;
-    Serial.println("-----Forward-----");
+    // Serial.println("-----Forward-----");
   } else {
     driveLeftDir = 0;
     driveRightDir = 0;
-    Serial.println("-----Reverse-----");
+    // Serial.println("-----Reverse-----");
   }
 
   // calculate turning speed
-  if (flyCH1 != 0 && flyCH2 > 0) {
+  if (flyCH1_roll != 0 && flyCH2_pitch > 0) {
     // forward
-    driveLeftSpeed += abs(flyCH2 + flyCH1);
-    driveRightSpeed += abs(flyCH2 - flyCH1);
+    driveLeftSpeed += abs(flyCH2_pitch + flyCH1_roll);
+    driveRightSpeed += abs(flyCH2_pitch - flyCH1_roll);
   } else {
-    driveLeftSpeed += abs(flyCH2);
-    driveRightSpeed += abs(flyCH2);
+    driveLeftSpeed += abs(flyCH2_pitch);
+    driveRightSpeed += abs(flyCH2_pitch);
   }
 
   // constrain speed
-  driveLeftSpeed = constrain(driveLeftSpeed, 0, 255);
-  driveRightSpeed = constrain(driveRightSpeed, 0, 255);
+  driveLeftSpeed = constrain(driveLeftSpeed, 1000, 2000);
+  driveRightSpeed = constrain(driveRightSpeed, 1000, 2000);
 
   // drive motors
   drive.controlDriveLeftMotor(driveLeftSpeed, driveLeftDir);
   drive.controlDriveRightMotor(driveRightSpeed, driveRightDir);
 
-  Serial.print("Left speed = ");
-  Serial.print(driveLeftSpeed);
-  Serial.print("  |  Right speed = ");
-  Serial.print(driveRightSpeed);
+  // Serial.print("Left speed = ");
+  // Serial.print(driveLeftSpeed);
+  // Serial.print("  |  Right speed = ");
+  // Serial.print(driveRightSpeed);
+  Serial.println();
 
   delay(50);
 }
