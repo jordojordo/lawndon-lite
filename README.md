@@ -10,6 +10,10 @@ The main idea is to have a high torque, low power mower to be efficient and powe
  
 Refer to the [Wiki](https://github.com/jordojordo/lawndon-lite/wiki) for prerequisites, required materials, and configuration instructions.
 
+## Videos
+
+I'll continually update the [Videos section](https://github.com/jordojordo/lawndon-lite/wiki/Videos) of the Wiki to document the current progress of Lawndon.
+
 ## TODO
 
 - Design printable chassis
