@@ -1,68 +1,97 @@
 #include "drive.h"
-#include "flysky.h"
+#include "controller.h"
 #include <Arduino.h>
 #include <Servo.h>
 
 Servo leftEsc;
 Servo rightEsc;
+Drive drive;
 
 Drive::Drive() {};
 
 void Drive::setup() {
-  Serial.begin(CONSOLE_BAUDRATE);
-  Serial.println(F("SETUP"));
+  Console.begin(CONSOLE_BAUDRATE);
+  Console.println(F("SETUP"));
 
-  leftEsc.attach(pinDriveLeftPwm, 1000, 2000);
-  rightEsc.attach(pinDriveRightPwm, 1000, 2000);
+  // Attach ESCs
+  leftEsc.attach(ESC_LEFT_PWM, 1000, 2000);
+  rightEsc.attach(ESC_RIGHT_PWM, 1000, 2000);
   delay(1);
 
-  // Arm escs
-  leftEsc.write(40);
-  rightEsc.write(40);
+  // Calibrate ESCs
+  calibrateEsc(leftEsc);
+  calibrateEsc(rightEsc);
 
-  pinMode(pinDriveLeftDir, OUTPUT);
-  pinMode(pinDriveLeftPwm, OUTPUT);
-  pinMode(pinDriveLeftBrake, OUTPUT);
-  pinMode(pinDriveLeftPower, OUTPUT);
-
-  pinMode(pinDriveRightDir, OUTPUT);
-  pinMode(pinDriveRightPwm, OUTPUT);
-  pinMode(pinDriveRightBrake, OUTPUT);
-  pinMode(pinDriveRightPower, OUTPUT);
-
-  Flysky::setup();
-
-  Serial.println(F("Sending Flysky Config"));
-  Serial1.begin(FLYSKY_BAUDRATE);
-  ibus.begin(Serial1);
+  // Set ESC pins
+  pinMode(ESC_LEFT_PWM, OUTPUT);
+  pinMode(ESC_LEFT_POWER, OUTPUT);
+  pinMode(ESC_RIGHT_PWM, OUTPUT);
+  pinMode(ESC_RIGHT_POWER, OUTPUT);
 }
 
-void Drive::controlDriveLeftMotor(int speed, int direction) {
-  if (direction == 0) {
-    // reverse
-    digitalWrite(pinDriveLeftDir, LOW);
-    digitalWrite(pinDriveLeftBrake, HIGH);
+void Drive::loop() {
+  // Calculate turning speed
+  int mappedThrottle = map(controller.control_CH1_roll, ESC_MIN_THROTTLE, ESC_MAX_THROTTLE, -500, 500);
+
+  // Determine direction and adjust motor speeds
+  if (controller.control_CH2_pitch >= ESC_IDLE_THROTTLE) {
+    // Forward
+    driveLeftSpeed = controller.control_CH2_pitch + mappedThrottle;
+    driveRightSpeed = controller.control_CH2_pitch - mappedThrottle;
   } else {
-    // forward
-    digitalWrite(pinDriveLeftDir, HIGH);
-    digitalWrite(pinDriveLeftBrake, LOW);
+    // Reverse
+    driveLeftSpeed = controller.control_CH2_pitch - mappedThrottle;
+    driveRightSpeed = controller.control_CH2_pitch + mappedThrottle;
   }
 
-  // control
-  leftEsc.writeMicroseconds(speed);
+  // Constrain speed
+  driveLeftSpeed = constrain(driveLeftSpeed, ESC_MIN_THROTTLE, ESC_MAX_THROTTLE);
+  driveRightSpeed = constrain(driveRightSpeed, ESC_MIN_THROTTLE, ESC_MAX_THROTTLE);
+
+  // Drive motors
+  controlDriveMotor(driveLeftSpeed, leftEsc);
+  controlDriveMotor(driveRightSpeed, rightEsc);
+
+  // Used for debugging control
+  // Serial.print("Left speed = ");
+  // Serial.print(driveLeftSpeed);
+  // Serial.print("  |  Right speed = ");
+  // Serial.print(driveRightSpeed);
+  // Serial.print("  |  Roll = ");
+  // Serial.print(controller.control_CH1_roll);
+  // Serial.print("  |  Pitch = ");
+  // Serial.print(controller.control_CH2_pitch);
+  // Serial.println();
+
+  delay(50);
 }
 
-void Drive::controlDriveRightMotor(int speed, int direction) {
-  if (direction == 0) {
-    // reverse
-    digitalWrite(pinDriveRightDir, LOW);
-    digitalWrite(pinDriveRightBrake, HIGH);
-  } else {
-    // forward
-    digitalWrite(pinDriveRightDir, HIGH);
-    digitalWrite(pinDriveRightBrake, LOW);
+// Initialize ESC as bi-directional
+void Drive::calibrateEsc(Servo esc) {
+  esc.writeMicroseconds(ESC_ARM_TIME);
+  delay(ESC_ARM_TIME);
+  esc.writeMicroseconds(ESC_MIN_THROTTLE);
+  delay(ESC_ARM_TIME);
+  esc.writeMicroseconds(ESC_IDLE_THROTTLE);
+  delay(ESC_ARM_TIME);
+}
+
+// Controls supplied ESC by writing speed in microseconds
+void Drive::controlDriveMotor(int speed, Servo esc) {
+  if (isDeadzone(speed)) {
+    speed = ESC_IDLE_THROTTLE;
   }
 
-  // control
-  rightEsc.writeMicroseconds(speed);
+  int curSpeed = esc.readMicroseconds();
+
+  // The controller flutters signal occasionally +-10, so we do not write those flutters to the motor
+  if (curSpeed < (speed - ESC_FLUTTER_RANGE) || curSpeed > (speed + ESC_FLUTTER_RANGE)) {
+    esc.writeMicroseconds(speed);
+  }
+}
+
+// Determines if speed falls between 1400 - 1600
+// Ensures motors will not turn until joystick is pressed
+bool Drive::isDeadzone(int speed) {
+  return (speed >= (ESC_IDLE_THROTTLE - ESC_DEADZONE_RANGE) && speed <= (ESC_IDLE_THROTTLE + ESC_DEADZONE_RANGE));
 }

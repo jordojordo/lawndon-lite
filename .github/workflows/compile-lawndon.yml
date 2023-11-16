@@ -1,0 +1,44 @@
+name: Compile Lawndon Lite
+
+on:
+  workflow_dispatch:
+  release:
+    types: [released]
+
+jobs:
+  compile-sketch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Arduino cli
+        uses: arduino/setup-arduino-cli@v1
+
+      - name: Install libraries
+        run: |
+          arduino-cli lib install --git-url https://github.com/bmellink/IBusBM.git#1.1.5
+          arduino-cli lib install --git-url https://github.com/arduino-libraries/Servo.git#1.2.1
+      
+      - name: Compile Lawndon
+        uses: arduino/compile-sketches@v1
+        with: 
+          fqbn: "arduino:avr:mega"
+          libraries: | 
+            - name: IBusBM
+            - name: Servo
+          sketch-paths: |
+            - ./lawndon
+          enable-warnings-report: true
+          verbose: false
+          cli-compile-flags: |
+            - --export-binaries
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ./lawndon/build

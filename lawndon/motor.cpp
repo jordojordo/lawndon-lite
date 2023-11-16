@@ -1,5 +1,5 @@
 #include "motor.h"
-#include "flysky.h"
+#include "controller.h"
 #include <Arduino.h>
 #include <IBusBM.h>
 
@@ -17,17 +17,14 @@ void Motor::setup() {
 }
 
 void Motor::loop() {  
-  flyCH9_swd = readChannel(9, 0, 1, 0);
-  int swdOut = map(flyCH9_swd, 0, 1, 0, 255);
+  int swdOut = map(controller.control_CH9_swd, 0, 1, 0, 255);
 
+  // Set motor 
   analogWrite(motorEna, swdOut);
 
-  if (flyCH9_swd == 1) {
+  if (controller.control_CH9_swd == 1) {
     analogWrite(motorIn1, HIGH);
   } else {
     analogWrite(motorIn1, LOW);
   }
-
-  Serial.print(" | flyCH9_swd: ");
-  Serial.print(flyCH9_swd);
 }

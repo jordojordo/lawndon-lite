@@ -1,15 +1,15 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#include "flysky.h"
+#include "controller.h"
 #include <Arduino.h>
 
-// pins
+// Mower Motor pins
 #define motorEna 5
 #define motorIn1 22
 #define motorIn2 23 
 
-class Motor : public Flysky {
+class Motor {
 public:
   Motor();
 
@@ -19,4 +19,4 @@ public:
 
 extern Motor motor;
 
-#endif
+#endif // MOTOR_H
