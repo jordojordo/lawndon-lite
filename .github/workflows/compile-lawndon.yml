@@ -20,8 +20,8 @@ jobs:
 
       - name: Install libraries
         run: |
-          arduino-cli lib install --git-url https://github.com/bmellink/IBusBM.git#1.1.5
-          arduino-cli lib install --git-url https://github.com/arduino-libraries/Servo.git#1.2.1
+          arduino-cli lib install IBusBM
+          arduino-cli lib install Servo
       
       - name: Compile Lawndon
         uses: arduino/compile-sketches@v1
@@ -41,4 +41,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: ./lawndon/build
+          files: |
+            lawndon/build/arduino.avr.mega/*
