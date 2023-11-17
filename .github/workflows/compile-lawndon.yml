@@ -20,8 +20,7 @@ jobs:
 
       - name: Install libraries
         run: |
-          arduino-cli lib install IBusBM
-          arduino-cli lib install Servo
+          arduino-cli lib install IBusBM Servo
       
       - name: Compile Lawndon
         uses: arduino/compile-sketches@v1
