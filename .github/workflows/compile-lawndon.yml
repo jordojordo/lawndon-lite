@@ -6,7 +6,7 @@ on:
     types: [released]
 
 jobs:
-  compile-sketch:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -37,9 +37,18 @@ jobs:
           cli-compile-flags: |
             - --export-binaries
 
-      - name: Release
+      - name: Package build
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          for dir in ./lawndon/build/*; do
+            if [ -d "${dir}" ]; then
+              tar -czvf "${dir}.tar.gz" -C "${dir}" .
+            fi
+          done
+
+      - name: Release build
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            lawndon/build/arduino.avr.mega/*
+            lawndon/build/*.tar.gz
