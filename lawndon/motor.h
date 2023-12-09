@@ -5,9 +5,11 @@
 #include <Arduino.h>
 
 // Mower Motor pins
-#define motorEna 5
-#define motorIn1 22
-#define motorIn2 23 
+#define motorEnaR 5
+#define motorEnaL 6
+#define motorVcc 7
+#define motorPwmR 22
+#define motorPwmL 23 
 
 class Motor {
 public:

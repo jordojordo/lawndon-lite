@@ -8,23 +8,24 @@ Motor motor;
 Motor::Motor() {}
 
 void Motor::setup() {
-  pinMode(motorEna, OUTPUT);
-  pinMode(motorIn1, INPUT);
-  pinMode(motorIn2, INPUT);
+  pinMode(motorEnaR, OUTPUT);
+  pinMode(motorEnaL, OUTPUT);
+  pinMode(motorPwmR, OUTPUT);
+  pinMode(motorPwmL, OUTPUT);
 
-  digitalWrite(motorIn1, LOW);
-  digitalWrite(motorIn2, HIGH);
+  digitalWrite(motorPwmR, LOW);
+  digitalWrite(motorPwmL, HIGH);
 }
 
 void Motor::loop() {  
   int swdOut = map(controller.control_CH9_swd, 0, 1, 0, 255);
 
   // Set motor 
-  analogWrite(motorEna, swdOut);
+  analogWrite(motorEnaR, swdOut);
 
   if (controller.control_CH9_swd == 1) {
-    analogWrite(motorIn1, HIGH);
+    analogWrite(motorPwmR, HIGH);
   } else {
-    analogWrite(motorIn1, LOW);
+    analogWrite(motorPwmR, LOW);
   }
 }
