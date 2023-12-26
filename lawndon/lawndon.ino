@@ -9,6 +9,8 @@ void setup() {
   drive.setup();
   controller.setup();
   motor.setup();
+
+  Console.println(F("__________BEGIN__________"));
 }
 
 void loop() {

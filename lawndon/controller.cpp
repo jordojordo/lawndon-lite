@@ -20,9 +20,11 @@ int Controller::readChannel(byte channelInput, int minLimit, int maxLimit,
 };
 
 void Controller::setup() {
-  Console.println(F("Sending Controller Config"));
+  Console.println(F("Sending controller config"));
   ControllerPort.begin(CONTROLLER_BAUDRATE);
   ibus.begin(ControllerPort);
+
+  Console.println(F("Controller setup complete"));
 }
 
 void Controller::loop() {

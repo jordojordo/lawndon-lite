@@ -11,22 +11,35 @@ Drive::Drive() {};
 
 void Drive::setup() {
   Console.begin(CONSOLE_BAUDRATE);
-  Console.println(F("SETUP"));
-
+  Console.println(F("__________SETUP__________"));
+  Console.println(F("Initializing drive config"));
+  
   // Attach ESCs
+  Console.println(F("Attaching ESCs"));
   leftEsc.attach(ESC_LEFT_PWM, 1000, 2000);
   rightEsc.attach(ESC_RIGHT_PWM, 1000, 2000);
   delay(1);
 
-  // Calibrate ESCs
-  calibrateEsc(leftEsc);
-  calibrateEsc(rightEsc);
+  // Calibrate ESCs ( Needed for initial setup )
+  // calibrateEsc(leftEsc);
+  // calibrateEsc(rightEsc);
+
+  // Arm ESCs
+  Console.println(F("Arming left ESC"));
+  armEsc(leftEsc);
+
+  Console.println(F("Arming right ESC"));
+  armEsc(rightEsc);
+  delay(1);
+
 
   // Set ESC pins
   pinMode(ESC_LEFT_PWM, OUTPUT);
   pinMode(ESC_LEFT_POWER, OUTPUT);
   pinMode(ESC_RIGHT_PWM, OUTPUT);
   pinMode(ESC_RIGHT_POWER, OUTPUT);
+  
+  Console.println(F("Drive setup complete"));
 }
 
 void Drive::loop() {
@@ -74,6 +87,11 @@ void Drive::calibrateEsc(Servo esc) {
   delay(ESC_ARM_TIME);
   esc.writeMicroseconds(ESC_IDLE_THROTTLE);
   delay(ESC_ARM_TIME);
+}
+
+// Initialize ESC
+void Drive::armEsc(Servo esc) {
+  esc.writeMicroseconds(ESC_ARM_SIGNAL);
 }
 
 // Controls supplied ESC by writing speed in microseconds

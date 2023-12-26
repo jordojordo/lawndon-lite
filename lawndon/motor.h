@@ -5,11 +5,10 @@
 #include <Arduino.h>
 
 // Mower Motor pins
-#define motorEnaR 5
-#define motorEnaL 6
-#define motorVcc 7
-#define motorPwmR 22
-#define motorPwmL 23 
+#define motorEnaR 22
+#define motorEnaL 23
+#define motorPwmR 6
+#define motorPwmL 7
 
 class Motor {
 public:
@@ -17,6 +16,7 @@ public:
 
   virtual void setup();
   virtual void loop();
+  virtual void setupTimer4();
 };
 
 extern Motor motor;

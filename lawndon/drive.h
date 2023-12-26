@@ -39,6 +39,7 @@ public:
   virtual void loop();
 
   virtual void calibrateEsc(Servo esc);
+  virtual void armEsc(Servo esc);
   virtual void controlDriveMotor(int speed, Servo esc);
   virtual bool isDeadzone(int speed);
 };
