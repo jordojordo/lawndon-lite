@@ -21,7 +21,9 @@ void Drive::setup() {
   delay(1);
 
   // Calibrate ESCs ( Needed for initial setup )
+  // Console.println(F("Calibrating left ESC"));
   // calibrateEsc(leftEsc);
+  // Console.println(F("Calibrating right ESC"));
   // calibrateEsc(rightEsc);
 
   // Arm ESCs

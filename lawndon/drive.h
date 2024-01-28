@@ -10,8 +10,8 @@ extern Servo leftEsc;
 extern Servo rightEsc;
 
 // pin defs
-#define ESC_LEFT_PWM            3
-#define ESC_LEFT_POWER          4
+#define ESC_LEFT_PWM            4
+#define ESC_LEFT_POWER          3
 
 #define ESC_RIGHT_PWM           11
 #define ESC_RIGHT_POWER         10

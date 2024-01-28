@@ -2,41 +2,36 @@
 #include "controller.h"
 #include <Arduino.h>
 #include <IBusBM.h>
+#include <Servo.h>
 
 Motor motor;
+Servo mowerEsc;
 
 Motor::Motor() {}
 
 void Motor::setup() {
   Console.println(F("Initializing motor config"));
 
-  setupTimer4();
-  pinMode(motorEnaR, OUTPUT);
-  pinMode(motorEnaL, OUTPUT);
-  pinMode(motorPwmR, OUTPUT);
-  pinMode(motorPwmL, OUTPUT);
+  // Attach Mower ESC
+  Console.println(F("Attaching mower ESC"));
+  mowerEsc.attach(ESC_MOWER_PWM, 1000, 2000);
+  delay(1);
 
-  digitalWrite(motorEnaR, HIGH);
-  digitalWrite(motorEnaL, HIGH);
-  analogWrite(motorPwmR, LOW);
-  analogWrite(motorPwmL, LOW);
+  // Arm Mower ESC
+  Console.println(F("Arming mower ESC"));
+  mowerEsc.writeMicroseconds(1000);
+
+  // Set mower ESC pins
+  pinMode(ESC_MOWER_PWM, OUTPUT);
+  pinMode(ESC_MOWER_POWER, OUTPUT);
 
   Console.println(F("Motor setup complete"));
 }
 
 void Motor::loop() {  
-  int swdOut = map(controller.control_CH9_swd, 0, 1, 0, 255);
-
   if (controller.control_CH9_swd == 1) {
-    analogWrite(motorPwmR, swdOut);
+    mowerEsc.writeMicroseconds(2000);
   } else {
-    analogWrite(motorPwmR, swdOut);
+    mowerEsc.writeMicroseconds(1000);
   }
-}
-
-// Adjusts Timer4 for a frequency of 1kHz
-// [optional]: depends on the mower motor requirements
-void Motor::setupTimer4() {
-  TCCR4B = TCCR4B & 0b11111000 | 0x01; // Change prescaler
-  ICR4 = 32000; // Adjust the TOP value for 1kHz at 16MHz clock speed
 }
