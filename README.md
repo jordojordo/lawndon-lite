@@ -1,3 +1,5 @@
+[![Build Tests](https://github.com/jordojordo/lawndon-lite/actions/workflows/tests.yml/badge.svg?event=schedule)](https://github.com/jordojordo/lawndon-lite/actions/workflows/tests.yml)
+
 # Lawndon Lite
 
 > Note: Lawndon is a WIP and the construction can be modified entirely to fit your desired needs. 
