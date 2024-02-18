@@ -12,6 +12,9 @@ Motor::Motor() {}
 void Motor::setup() {
   Console.println(F("Initializing motor config"));
 
+  // Setup for changing the PWM frequency of pin 7
+  setupTimer4();
+
   // Attach Mower ESC
   Console.println(F("Attaching mower ESC"));
   mowerEsc.attach(ESC_MOWER_PWM, 1000, 2000);
@@ -34,4 +37,8 @@ void Motor::loop() {
   } else {
     mowerEsc.writeMicroseconds(1000);
   }
+}
+
+void Motor::setupTimer4() {
+    TCCR4B = TCCR4B & 0b11111000 | 0x04; // Set prescaler to 256 for Timer 4
 }
