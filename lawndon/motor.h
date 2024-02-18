@@ -14,6 +14,8 @@ public:
 
   virtual void setup();
   virtual void loop();
+
+  virtual void setupTimer4();
 };
 
 extern Motor motor;
