@@ -15,14 +15,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Arduino cli
-        uses: arduino/setup-arduino-cli@v1
+        uses: arduino/setup-arduino-cli@v2
 
       - name: Install libraries
         run: |
           arduino-cli lib install IBusBM Servo
 
       - name: Lint project
-        uses: arduino/arduino-lint-action@v1
+        uses: arduino/arduino-lint-action@v2
         with:
           path: ./lawndon
           library-manager: update
