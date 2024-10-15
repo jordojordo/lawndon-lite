@@ -3,8 +3,10 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-Servo leftEsc;
-Servo rightEsc;
+Servo frontLeftEsc;
+Servo frontRightEsc;
+Servo rearLeftEsc;
+Servo rearRightEsc;
 Drive drive;
 
 Drive::Drive() {};
@@ -16,30 +18,37 @@ void Drive::setup() {
   
   // Attach ESCs
   Console.println(F("Attaching ESCs"));
-  leftEsc.attach(ESC_LEFT_PWM, 1000, 2000);
-  rightEsc.attach(ESC_RIGHT_PWM, 1000, 2000);
+  frontLeftEsc.attach(ESC_FRONT_LEFT_PWM, 1000, 2000);
+  frontRightEsc.attach(ESC_FRONT_RIGHT_PWM, 1000, 2000);
+  rearLeftEsc.attach(ESC_REAR_LEFT_PWM, 1000, 2000);
+  rearRightEsc.attach(ESC_REAR_RIGHT_PWM, 1000, 2000);
   delay(1);
 
   // Calibrate ESCs ( Needed for initial setup )
   // Console.println(F("Calibrating left ESC"));
-  // calibrateEsc(leftEsc);
+  // calibrateEsc(frontLeftEsc);
   // Console.println(F("Calibrating right ESC"));
-  // calibrateEsc(rightEsc);
+  // calibrateEsc(frontRightEsc);
 
   // Arm ESCs
-  Console.println(F("Arming left ESC"));
-  armEsc(leftEsc);
+  Console.println(F("Arming front ESCs"));
+  armEsc(frontLeftEsc);
+  armEsc(frontRightEsc);
 
-  Console.println(F("Arming right ESC"));
-  armEsc(rightEsc);
+  Console.println(F("Arming rear ESCs"));
+  armEsc(rearLeftEsc);
+  armEsc(rearRightEsc);
   delay(1);
 
-
   // Set ESC pins
-  pinMode(ESC_LEFT_PWM, OUTPUT);
-  pinMode(ESC_LEFT_POWER, OUTPUT);
-  pinMode(ESC_RIGHT_PWM, OUTPUT);
-  pinMode(ESC_RIGHT_POWER, OUTPUT);
+  pinMode(ESC_FRONT_LEFT_PWM, OUTPUT);
+  pinMode(ESC_FRONT_LEFT_POWER, OUTPUT);
+  pinMode(ESC_FRONT_RIGHT_PWM, OUTPUT);
+  pinMode(ESC_FRONT_RIGHT_POWER, OUTPUT);
+  pinMode(ESC_REAR_LEFT_PWM, OUTPUT);
+  pinMode(ESC_REAR_LEFT_POWER, OUTPUT);
+  pinMode(ESC_REAR_RIGHT_PWM, OUTPUT);
+  pinMode(ESC_REAR_RIGHT_POWER, OUTPUT);
   
   Console.println(F("Drive setup complete"));
 }
@@ -64,8 +73,10 @@ void Drive::loop() {
   driveRightSpeed = constrain(driveRightSpeed, ESC_MIN_THROTTLE, ESC_MAX_THROTTLE);
 
   // Drive motors
-  controlDriveMotor(driveLeftSpeed, leftEsc);
-  controlDriveMotor(driveRightSpeed, rightEsc);
+  controlDriveMotor(driveLeftSpeed, frontLeftEsc);
+  controlDriveMotor(driveRightSpeed, frontRightEsc);
+  controlDriveMotor(driveLeftSpeed, rearLeftEsc);
+  controlDriveMotor(driveRightSpeed, rearRightEsc);
 
   // Used for debugging control
   // Serial.print("Left speed = ");

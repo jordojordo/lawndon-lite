@@ -6,15 +6,21 @@
 #include <Servo.h>
 
 // ESC
-extern Servo leftEsc;
-extern Servo rightEsc;
+extern Servo frontLeftEsc;
+extern Servo frontRightEsc;
+extern Servo rearLeftEsc;
+extern Servo rearRightEsc;
 
 // pin defs
-#define ESC_LEFT_POWER          3
-#define ESC_LEFT_PWM            4
+#define ESC_FRONT_LEFT_POWER    3
+#define ESC_FRONT_LEFT_PWM      4
+#define ESC_FRONT_RIGHT_POWER   8
+#define ESC_FRONT_RIGHT_PWM     9
 
-#define ESC_RIGHT_POWER         10
-#define ESC_RIGHT_PWM           11
+#define ESC_REAR_LEFT_POWER     5
+#define ESC_REAR_LEFT_PWM       6
+#define ESC_REAR_RIGHT_POWER    10
+#define ESC_REAR_RIGHT_PWM      11
 
 // Throttle positions
 #define ESC_MIN_THROTTLE        1000
