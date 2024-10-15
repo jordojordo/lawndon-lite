@@ -2,7 +2,9 @@
 
 # Lawndon Lite
 
-> Note: Lawndon is a WIP and the construction can be modified entirely to fit your desired needs. 
+> Note: Lawndon is a WIP and the construction can be modified entirely to fit your desired needs.
+
+> *October 2024 Update*: I have rebuilt lawndon with a new chassis, a separate ESC for the mower motor and 4x4 capabilities, wiki will be updated soon...
 
 Before turning Lawndon into an autonomous mower, the first step is to create a remote controlled mower which can tackle any terrain. This can be accomplished by recycling any "outdated" electric mower you can find, I found a suitable [24v Worx mower](https://www.worx.com/24v-cordless-lawn-mower-wg782.html) which someone was throwing out. Eventually, I would like to construct a complete build for Lawndon that is reproducable by anyone with a 3d printer.
 
