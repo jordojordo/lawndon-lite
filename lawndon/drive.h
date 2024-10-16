@@ -12,13 +12,13 @@ extern Servo rearLeftEsc;
 extern Servo rearRightEsc;
 
 // pin defs
-#define ESC_FRONT_LEFT_POWER    3
-#define ESC_FRONT_LEFT_PWM      4
+#define ESC_FRONT_LEFT_POWER    2
+#define ESC_FRONT_LEFT_PWM      3
 #define ESC_FRONT_RIGHT_POWER   8
 #define ESC_FRONT_RIGHT_PWM     9
 
-#define ESC_REAR_LEFT_POWER     5
-#define ESC_REAR_LEFT_PWM       6
+#define ESC_REAR_LEFT_POWER     4
+#define ESC_REAR_LEFT_PWM       5
 #define ESC_REAR_RIGHT_POWER    10
 #define ESC_REAR_RIGHT_PWM      11
 
